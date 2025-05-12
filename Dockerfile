@@ -16,6 +16,9 @@ COPY . .
 # Строим проект
 RUN yarn build
 
+# Генерируем Prisma клиент
+RUN yarn prisma:generate
+
 # Открываем порт 4000 для приложения
 EXPOSE 4000
 
@@ -23,5 +26,9 @@ EXPOSE 4000
 ENV PORT=4000
 ENV NODE_ENV=production
 
-# Запускаем приложение из папки dist
-CMD ["yarn", "start:prod"]
+# Создаем скрипт для запуска миграций и приложения
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Запускаем скрипт
+ENTRYPOINT ["docker-entrypoint.sh"]
