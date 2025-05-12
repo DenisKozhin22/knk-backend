@@ -27,7 +27,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
 
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(',')
+      : ['http://localhost:5173', 'https://knk-frontend.onrender.com'],
     credentials: true,
   })
 
