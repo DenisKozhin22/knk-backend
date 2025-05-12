@@ -6,5 +6,3 @@ buildCommand = "yarn install && yarn prisma:generate && yarn build"
 startCommand = "yarn prisma:migrate && yarn start:prod"
 healthcheckPath = "/api"
 healthcheckTimeout = 100
-restartPolicyType = "on-failure"
-restartPolicyMaxRetries = 10 
