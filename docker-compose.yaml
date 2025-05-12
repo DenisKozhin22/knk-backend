@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: knk-tickets-app
+    restart: always
+    ports:
+      - '4000:4000'
+    environment:
+      - DATABASE_URL=postgresql://knkuser:knk_2209@postgres:5432/knkdatabase?schema=public
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:15
+    container_name: knk-tickets-db
+    restart: always
+    environment:
+      POSTGRES_USER: knkuser
+      POSTGRES_PASSWORD: knk_2209
+      POSTGRES_DB: knkdatabase
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U knkuser -d knkdatabase']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    name: knk-tickets-network
