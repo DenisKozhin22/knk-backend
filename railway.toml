@@ -1,8 +1,12 @@
 [build]
 builder = "nixpacks"
-buildCommand = "yarn install && yarn prisma:generate && yarn prisma:migrate && yarn build"
+buildCommand = """
+  yarn install &&
+  npx prisma generate &&
+  yarn build
+"""
 
 [deploy]
-startCommand = "yarn start:prod"
+startCommand = "npx prisma migrate deploy && yarn start:prod"
 healthcheckPath = "/api"
 healthcheckTimeout = 100
